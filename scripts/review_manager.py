@@ -17,24 +17,16 @@ from typing import Dict, List, Tuple
 import argparse
 import sys
 
-# 确保可以导入gamification模块
+# 确保可以导入其他模块
 sys.path.insert(0, str(Path(__file__).parent))
+
+# 导入配置加载工具
+from config_loader import load_config
 
 # 项目根目录（脚本在 system/scripts/ 中）
 ROOT_DIR = Path(__file__).parent.parent.parent
 NOTES_DIR = ROOT_DIR / "notes"
 OUTLINES_DIR = ROOT_DIR / "面试大纲"
-
-# 配置文件（优先使用用户配置，后备使用模板配置）
-USER_CONFIG = ROOT_DIR / "config" / "kb_config.yaml"
-TEMPLATE_CONFIG = ROOT_DIR / "system" / "config" / "kb_config.yaml"
-CONFIG_FILE = USER_CONFIG if USER_CONFIG.exists() else TEMPLATE_CONFIG
-
-
-def load_config() -> Dict:
-    """加载配置文件"""
-    with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
 
 
 def parse_frontmatter(content: str) -> Tuple[Dict, str]:

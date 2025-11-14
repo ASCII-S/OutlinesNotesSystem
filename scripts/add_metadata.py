@@ -9,26 +9,22 @@
 
 import os
 import re
+import sys
 import yaml
 from datetime import datetime
 from pathlib import Path
 from typing import Dict
 import argparse
 
+# 确保可以导入其他模块
+sys.path.insert(0, str(Path(__file__).parent))
+
+# 导入配置加载工具
+from config_loader import load_config
+
 # 项目根目录
 ROOT_DIR = Path(__file__).parent.parent.parent  # 脚本在 system/scripts/ 中
 NOTES_DIR = ROOT_DIR / "notes"
-
-# 配置文件（优先用户配置，后备模板配置）
-USER_CONFIG = ROOT_DIR / "config" / "kb_config.yaml"
-TEMPLATE_CONFIG = ROOT_DIR / "system" / "config" / "kb_config.yaml"
-CONFIG_FILE = USER_CONFIG if USER_CONFIG.exists() else TEMPLATE_CONFIG
-
-
-def load_config() -> Dict:
-    """加载配置文件"""
-    with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
 
 
 def has_frontmatter(content: str) -> bool:

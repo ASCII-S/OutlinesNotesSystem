@@ -1,0 +1,9 @@
+# Python
+**/__pycache__/
+*.py[cod]
+*.so
+
+# 临时文件
+*.tmp
+*.bak
+.cache/

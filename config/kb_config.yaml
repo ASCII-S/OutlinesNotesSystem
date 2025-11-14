@@ -3,7 +3,7 @@
 # 路径配置
 paths:
   notes_dir: "notes"
-  outlines_dir: "面试大纲"
+  outlines_dir: "outlines"
   scripts_dir: "scripts"
   
 # 复习间隔配置（天数）
@@ -86,8 +86,7 @@ git_auto_commit:
   # 自动提交时包含的目录和文件（只提交笔记相关内容）
   include_paths:
     - "notes/"              # 笔记目录
-    - "面试大纲/"            # 大纲目录
-    - "outlines/"           # 大纲目录（英文名）
+    - "outlines/"           # 大纲目录
     - "config/"             # 配置目录
     - "reviewsToday.md"         # reviewsToday清单
 

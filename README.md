@@ -27,9 +27,9 @@
 │   └── docs/               # 文档中心（本页所在地）
 ├── outlines/               # 个人主题大纲（init.sh 初始化后创建）
 ├── notes/                  # 知识点笔记（init.sh 初始化后创建）
-├── examples/               # 示例大纲与笔记（可选）
+├── reviewsArchived/        # 复习归档(init.sh 初始化后创建)
 ├── config/                 # 用户自定义配置（覆盖 system/config）
-├── reviewsToday.md         # 自动生成的复习任务清单
+├── reviewsToday.md         # 自动生成的复习任务清单 (start.sh 生成)
 ├── start.sh                # 可选：快捷启动脚本（调用 ./system/start.sh）
 ├── end.sh                  # 可选：快捷结束脚本（调用 ./system/end.sh）
 └── README.md               # 仓库首页说明

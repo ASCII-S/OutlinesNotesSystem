@@ -23,7 +23,11 @@ from pathlib import Path
 
 import yaml
 
-config_path = Path("system/config/git_config.yaml")
+# 优先读取用户层配置，如果不存在则读取系统默认配置
+user_config_path = Path("config/git_config.yaml")
+system_config_path = Path("system/config/git_config.yaml")
+
+config_path = user_config_path if user_config_path.exists() else system_config_path
 if not config_path.exists():
     print("git_config_present=0")
 else:
@@ -102,6 +106,7 @@ mkdir -p notes/outline_template
 mkdir -p outlines
 mkdir -p docs
 mkdir -p reviewsArchived
+mkdir -p config
 
 success "目录创建完成"
 echo
@@ -111,15 +116,35 @@ info "4️⃣ 检查配置文件..."
 
 kb_config_path="system/config/kb_config.yaml"
 git_config_path="system/config/git_config.yaml"
+user_kb_config_path="config/kb_config.yaml"
+user_git_config_path="config/git_config.yaml"
 
 if [ -f "$kb_config_path" ]; then
-    info "已检测到配置文件: $kb_config_path"
+    info "已检测到系统配置文件: $kb_config_path"
+    
+    # 如果用户配置不存在，复制系统默认配置
+    if [ ! -f "$user_kb_config_path" ]; then
+        cp "$kb_config_path" "$user_kb_config_path"
+        success "已创建用户配置文件: $user_kb_config_path（从系统默认配置复制）"
+        info "💡 你可以编辑 $user_kb_config_path 来自定义配置，它会覆盖系统默认值"
+    else
+        info "用户配置文件已存在: $user_kb_config_path（将覆盖系统默认配置）"
+    fi
 else
     warning "未找到必需的配置文件: $kb_config_path"
 fi
 
 if [ -f "$git_config_path" ]; then
-    info "已检测到 Git 配置文件: $git_config_path"
+    info "已检测到系统 Git 配置文件: $git_config_path"
+    
+    # 如果用户配置不存在，复制系统默认配置
+    if [ ! -f "$user_git_config_path" ]; then
+        cp "$git_config_path" "$user_git_config_path"
+        success "已创建用户 Git 配置文件: $user_git_config_path（从系统默认配置复制）"
+        info "💡 你可以编辑 $user_git_config_path 来自定义 Git 配置，它会覆盖系统默认值"
+    else
+        info "用户 Git 配置文件已存在: $user_git_config_path（将覆盖系统默认配置）"
+    fi
 else
     warning "未找到 Git 配置文件: $git_config_path"
 fi
@@ -194,12 +219,46 @@ Thumbs.db
 GITIGNORE
             fi
 
+            # 创建.gitmodules（如果 system 是一个 git 仓库）
+            if [ -d "system/.git" ]; then
+                system_remote_url=$(git -C system remote get-url origin 2>/dev/null || echo "")
+                if [ -n "$system_remote_url" ]; then
+                    if [ ! -f ".gitmodules" ]; then
+                        cat > .gitmodules << GITMODULES
+[submodule "system"]
+	path = system
+	url = $system_remote_url
+GITMODULES
+                        success "已创建 .gitmodules（system 子模块配置）"
+                    else
+                        info ".gitmodules 已存在，跳过创建"
+                    fi
+                else
+                    warning "system 目录是 git 仓库，但未找到远程 URL，跳过创建 .gitmodules"
+                fi
+            fi
+
             success "Git仓库已初始化"
         else
             warning "config/git_config.yaml 中未启用自动初始化，请手动执行 git init"
         fi
     else
         info "Git 仓库已存在，将继续应用配置"
+        
+        # 检查并创建.gitmodules（如果 system 是一个 git 仓库）
+        if [ -d "system/.git" ] && [ ! -f ".gitmodules" ]; then
+            system_remote_url=$(git -C system remote get-url origin 2>/dev/null || echo "")
+            if [ -n "$system_remote_url" ]; then
+                cat > .gitmodules << GITMODULES
+[submodule "system"]
+	path = system
+	url = $system_remote_url
+GITMODULES
+                success "已创建 .gitmodules（system 子模块配置）"
+            else
+                warning "system 目录是 git 仓库，但未找到远程 URL，跳过创建 .gitmodules"
+            fi
+        fi
     fi
 
     if [ -d ".git" ]; then

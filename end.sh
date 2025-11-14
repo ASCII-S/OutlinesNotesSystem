@@ -50,24 +50,20 @@ echo
 # 4. Git操作
 info "🐙 添加笔记相关文件到Git..."
 
-# 从配置文件读取要提交的路径
-CONFIG_FILE="config/kb_config.yaml"
-if [ ! -f "$CONFIG_FILE" ]; then
-    CONFIG_FILE="system/config/kb_config.yaml"
-fi
-
-# 使用Python读取配置并添加文件
+# 使用Python读取配置并添加文件（使用配置合并工具）
 python3 << 'PYTHON_SCRIPT'
-import yaml
 import subprocess
 import sys
 from pathlib import Path
 
-config_file = "config/kb_config.yaml" if Path("config/kb_config.yaml").exists() else "system/config/kb_config.yaml"
+# 添加 scripts 目录到路径，以便导入 config_loader
+sys.path.insert(0, str(Path("system/scripts")))
+
+from config_loader import load_config
 
 try:
-    with open(config_file, 'r', encoding='utf-8') as f:
-        config = yaml.safe_load(f)
+    # 使用配置合并工具加载配置
+    config = load_config()
     
     # 从配置中读取路径
     paths_to_add = []
