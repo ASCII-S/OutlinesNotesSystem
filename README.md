@@ -30,8 +30,8 @@
 ├── reviewsArchived/        # 复习归档(init.sh 初始化后创建)
 ├── config/                 # 用户自定义配置（覆盖 system/config）
 ├── reviewsToday.md         # 自动生成的复习任务清单 (start.sh 生成)
-├── start.sh                # 可选：快捷启动脚本（调用 ./system/start.sh）
-├── end.sh                  # 可选：快捷结束脚本（调用 ./system/end.sh）
+├── start.sh                # 快捷启动脚本（init.sh 自动创建，调用 ./system/start.sh）
+├── end.sh                  # 快捷结束脚本（init.sh 自动创建，调用 ./system/end.sh）
 └── README.md               # 仓库首页说明
 ```
 
@@ -70,6 +70,7 @@ system/
    - 自动检测依赖
    - 在知识库根目录创建 `notes/`、`outlines/`、`reviewsArchived/` 等目录
    - 复制默认配置到 `config/kb_config.yaml`
+   - 自动创建 `start.sh` 和 `end.sh` 快捷脚本
 
 4. **阅读核心文档**
    - `system/docs/INSTALLATION.md`：环境准备与依赖
@@ -87,22 +88,12 @@ system/
 
 ## 🔁 推荐工作流
 
-- **每日开始**：运行 `./system/start.sh` 生成reviewsToday清单、同步远程
+- **每日开始**：运行 `./start.sh` 生成reviewsToday清单、同步远程
 - **学习记录**：依据大纲更新知识点笔记，可使用脚本保持元数据一致
-- **每日结束**：运行 `./system/end.sh` 汇总复习结果并执行 Git 提交
+- **每日结束**：运行 `./end.sh` 汇总复习结果并执行 Git 提交
 - **周期复盘**：使用图谱与统计脚本了解整体进度（详见用户指南）
 
-**提示**：你也可以在知识库根目录创建 `start.sh` 和 `end.sh` 快捷脚本，内容分别为：
-```bash
-#!/bin/bash
-./system/start.sh "$@"
-```
-和
-```bash
-#!/bin/bash
-./system/end.sh "$@"
-```
-这样可以直接使用 `./start.sh` 和 `./end.sh`。
+> **提示**：`init.sh` 会自动在知识库根目录创建 `start.sh` 和 `end.sh` 快捷脚本，它们会调用 `./system/start.sh` 和 `./system/end.sh`。如果这些脚本已存在，初始化时会跳过创建。
 
 ---
 

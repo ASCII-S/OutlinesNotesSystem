@@ -16,8 +16,8 @@
 ## 2. 克隆模板
 
 ```bash
-git clone https://github.com/<your-account>/knowledge-base-template.git my-kb
-cd my-kb
+git clone https://github.com/<your-account>/knowledge-base-template.git system
+cd system
 ```
 
 如果你计划长期跟进上游模板更新，建议在仓库中添加 upstream：
@@ -64,7 +64,7 @@ pip install -r system/requirements.txt
 4. 如不存在用户配置，则复制 `system/config/kb_config.yaml` 至 `config/kb_config.yaml`
 5. 提示是否初始化 Git 仓库并拷贝模板 `.gitignore`
 
-> 首次执行后，如果你希望将模板适配为自己的仓库，请更新 `README.md` 与 `config/kb_config.yaml` 中的个性化信息。
+> 首次执行后，如果你希望将模板适配为自己的仓库，请更新`config/kb_config.yaml` 中的个性化信息。
 
 ---
 

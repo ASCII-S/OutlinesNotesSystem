@@ -7,7 +7,7 @@
 ## 1. 工作流概览
 
 1. **规划主题**：在 `outlines/` 中创建主题大纲，拆分知识点与复习节奏。
-2. **撰写知识点**：在 `notes/<主题>/` 内撰写 Markdown 笔记，保持 frontmatter 元数据完整。
+2. **撰写知识点**：在 `notes/<主题>/` 内撰写 Markdown 笔记。
 3. **自动化支持**：使用 `system/scripts/` 提供的工具生成复习清单、统计报表、知识图谱等。
 4. **每日自检**：通过 `system/start.sh`、`system/end.sh` 形成稳定的学习与复盘节奏。
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 3. Frontmatter 模板
+## 3. Frontmatter 模板(end.sh自动初始化元数据，无需手动添加)
 
 使用 `system/templates/note_template.md` 作为新笔记的起点，推荐保留以下字段：
 

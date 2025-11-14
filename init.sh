@@ -302,7 +302,34 @@ fi
 
 echo
 
-# 7. 完成
+# 7. 创建快捷脚本
+info "7️⃣ 创建快捷脚本..."
+
+if [ ! -f "start.sh" ]; then
+    cat > start.sh << 'STARTSCRIPT'
+#!/bin/bash
+./system/start.sh "$@"
+STARTSCRIPT
+    chmod +x start.sh
+    success "已创建快捷脚本: start.sh"
+else
+    info "start.sh 已存在，跳过创建"
+fi
+
+if [ ! -f "end.sh" ]; then
+    cat > end.sh << 'ENDSCRIPT'
+#!/bin/bash
+./system/end.sh "$@"
+ENDSCRIPT
+    chmod +x end.sh
+    success "已创建快捷脚本: end.sh"
+else
+    info "end.sh 已存在，跳过创建"
+fi
+
+echo
+
+# 8. 完成
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${GREEN}🎉 初始化完成！${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
