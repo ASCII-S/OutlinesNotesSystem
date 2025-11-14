@@ -98,7 +98,6 @@ echo
 # 3. 创建目录结构
 info "3️⃣ 创建目录结构..."
 
-mkdir -p notes
 mkdir -p notes/outline_template
 mkdir -p outlines
 mkdir -p docs
