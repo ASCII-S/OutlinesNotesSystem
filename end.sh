@@ -111,12 +111,57 @@ git commit -m "$COMMIT_MESSAGE" || {
     exit 0
 }
 
-git push || {
-    error "Git push失败"
-    exit 1
+# 加载Git配置，检查是否启用push
+load_git_config() {
+    python3 - <<'PY'
+import shlex
+from pathlib import Path
+
+import yaml
+
+# 优先读取用户层配置，如果不存在则读取系统默认配置
+user_config_path = Path("config/git_config.yaml")
+system_config_path = Path("system/config/git_config.yaml")
+
+config_path = user_config_path if user_config_path.exists() else system_config_path
+if not config_path.exists():
+    print("git_config_present=0")
+else:
+    try:
+        data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except Exception as exc:
+        print("git_config_present=1")
+        print(f"git_config_error={shlex.quote(str(exc))}")
+    else:
+        git_data = data.get("git") or {}
+
+        def emit(key: str, value):
+            if isinstance(value, bool):
+                value = int(value)
+            elif value is None:
+                value = ""
+            print(f"{key}={shlex.quote(str(value))}")
+
+        print("git_config_present=1")
+        push = git_data.get("push") or {}
+        emit("git_push_enabled", push.get("enabled", False))
+PY
 }
 
-success "✅ Git 提交并推送成功！"
+git_config_env=$(load_git_config)
+eval "$git_config_env"
+
+if [ "${git_push_enabled:-0}" -eq 1 ]; then
+    info "🚀 推送到远程仓库..."
+    git push || {
+        error "Git push失败"
+        exit 1
+    }
+    success "✅ Git 提交并推送成功！"
+else
+    info "💾 仅本地提交（push已禁用，如需推送请配置 config/git_config.yaml 中的 push.enabled: true）"
+    success "✅ Git 提交成功！"
+fi
 echo
 
 success "🎉 每日结束流程已完成！"

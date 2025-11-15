@@ -62,6 +62,9 @@ else:
 
         commit = git_data.get("commit") or {}
         emit("git_commit_message_template", commit.get("message_template", ""))
+
+        push = git_data.get("push") or {}
+        emit("git_push_enabled", push.get("enabled", False))
 PY
 }
 

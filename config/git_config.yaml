@@ -34,3 +34,7 @@ git:
     # 默认提交信息模板（可在后续自动化脚本中使用，可包含占位符如 {date}）
     message_template: "chore: 初始化知识库 - {date}"
 
+  push:
+    # 是否自动执行 git push（默认仅维持本地git，不推送）
+    enabled: false
+
