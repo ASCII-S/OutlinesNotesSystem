@@ -1,5 +1,5 @@
 ---
-globs: 面试大纲/**
+globs: outlines/**
 alwaysApply: false
 ---
 
