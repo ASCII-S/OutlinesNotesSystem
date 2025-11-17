@@ -94,8 +94,18 @@ echo
 info "2️⃣ 安装Python依赖..."
 
 if [ -f "system/requirements.txt" ]; then
+    # 检查是否已有虚拟环境
+    if [ ! -d "venv" ]; then
+        info "创建虚拟环境..."
+        python3 -m venv venv
+        success "虚拟环境创建完成"
+    fi
+
+    # 激活虚拟环境并安装依赖
+    source venv/bin/activate
     pip install -q -r system/requirements.txt
-    success "Python依赖安装完成"
+    success "Python依赖安装完成（虚拟环境）"
+    info "💡 使用时请先激活虚拟环境: source venv/bin/activate"
 else
     warning "未找到 requirements.txt"
 fi
