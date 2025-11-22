@@ -185,6 +185,34 @@ if [ -f "system/templates/outline_template.md" ]; then
     fi
 fi
 
+# 复制规则文件到对应目录
+if [ -f "system/rules/global.mdc" ]; then
+    if [ ! -f "CLAUDE.md" ]; then
+        cp system/rules/global.mdc CLAUDE.md
+        success "已创建全局规则文件: CLAUDE.md"
+    else
+        info "全局规则文件已存在，跳过"
+    fi
+fi
+
+if [ -f "system/rules/outline.mdc" ]; then
+    if [ ! -f "outlines/CLAUDE.md" ]; then
+        cp system/rules/outline.mdc outlines/CLAUDE.md
+        success "已创建大纲规则文件: outlines/CLAUDE.md"
+    else
+        info "大纲规则文件已存在，跳过"
+    fi
+fi
+
+if [ -f "system/rules/note.mdc" ]; then
+    if [ ! -f "notes/CLAUDE.md" ]; then
+        cp system/rules/note.mdc notes/CLAUDE.md
+        success "已创建笔记规则文件: notes/CLAUDE.md"
+    else
+        info "笔记规则文件已存在，跳过"
+    fi
+fi
+
 echo
 
 # 6. Git配置
