@@ -16,7 +16,7 @@ review_intervals:
     - 30   # 第5次
     - 60   # 第6次
     - 120  # 第7次及以后
-  medium:
+  medium:  
     - 1
     - 2
     - 5
@@ -68,16 +68,7 @@ statistics:
   generate_charts: true
   # 保留历史天数
   history_days: 365
-
-# 知识图谱配置
-knowledge_graph:
-  # 是否生成HTML可视化
-  generate_html: true
-  # 最小连接强度（显示阈值）
-  min_connection_strength: 0.2
-  # 节点大小基于什么（review_count/links/both）
-  node_size_by: "both"
-
+  
 # Git 自动提交配置
 git_auto_commit:
   enabled: true
