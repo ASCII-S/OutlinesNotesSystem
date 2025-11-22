@@ -25,7 +25,7 @@ from config_loader import load_config
 # 项目根目录（脚本在 system/scripts/ 中）
 ROOT_DIR = Path(__file__).parent.parent.parent
 NOTES_DIR = ROOT_DIR / "notes"
-OUTLINES_DIR = ROOT_DIR / "面试大纲"
+OUTLINES_DIR = ROOT_DIR / "outlines"
 
 
 def parse_frontmatter(content: str) -> Tuple[Dict, str]:

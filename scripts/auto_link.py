@@ -311,7 +311,7 @@ def main():
         print("📊 生成跨主题索引...")
         index_content = generate_cross_topic_index(all_notes, config)
         
-        output_file = ROOT_DIR / "面试大纲" / "_知识点索引.md"
+        output_file = ROOT_DIR / "outlines" / "_知识点索引.md"
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(index_content)
         

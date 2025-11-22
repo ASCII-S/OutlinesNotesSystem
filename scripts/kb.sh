@@ -140,19 +140,19 @@ case "${1:-}" in
         python scripts/knowledge_graph.py --all
         success "知识图谱已生成"
         info "  - HTML: docs/knowledge_graph.html"
-        info "  - Markdown: 面试大纲/_知识图谱.md"
+        info "  - Markdown: outlines/_知识图谱.md"
         ;;
     
     index)
         info "生成跨主题索引..."
         python scripts/auto_link.py index
-        success "跨主题索引已生成: 面试大纲/_知识点索引.md"
+        success "跨主题索引已生成: outlines/_知识点索引.md"
         ;;
     
     report)
         info "生成统计报表..."
         python scripts/stats_generator.py
-        success "统计报表已生成: 面试大纲/_统计报表.md"
+        success "统计报表已生成: outlines/_统计报表.md"
         ;;
     
     link)
@@ -267,9 +267,9 @@ case "${1:-}" in
         success "全部更新完成！"
         info "生成的文件:"
         info "  - reviewsToday.md"
-        info "  - 面试大纲/_知识图谱.md"
-        info "  - 面试大纲/_知识点索引.md"
-        info "  - 面试大纲/_统计报表.md"
+        info "  - outlines/_知识图谱.md"
+        info "  - outlines/_知识点索引.md"
+        info "  - outlines/_统计报表.md"
         info "  - docs/knowledge_graph.html"
         ;;
     

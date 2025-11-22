@@ -365,7 +365,7 @@ def main():
     print("📊 生成统计报表...")
     report_content = generate_report(notes, config)
     
-    output_file = ROOT_DIR / "面试大纲" / "_统计报表.md"
+    output_file = ROOT_DIR / "outlines" / "_统计报表.md"
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(report_content)
     

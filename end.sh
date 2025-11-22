@@ -71,7 +71,7 @@ try:
     # 1. 从 paths 配置读取
     if 'paths' in config:
         notes_dir = config['paths'].get('notes_dir', 'notes')
-        outlines_dir = config['paths'].get('outlines_dir', '面试大纲')
+        outlines_dir = config['paths'].get('outlines_dir', 'outlines')
         paths_to_add.extend([notes_dir, outlines_dir])
     
     # 2. 从 git_auto_commit.include_paths 读取（如果配置了）
@@ -93,7 +93,7 @@ except Exception as e:
     print(f"⚠️  读取配置失败: {e}", file=sys.stderr)
     # 回退到基本路径
     subprocess.run(['git', 'add', 'notes/'], capture_output=True)
-    subprocess.run(['git', 'add', '面试大纲/'], capture_output=True)
+    subprocess.run(['git', 'add', 'outlines/'], capture_output=True)
     print("⚠️  使用默认路径")
 PYTHON_SCRIPT
 
