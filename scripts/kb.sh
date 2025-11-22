@@ -67,13 +67,13 @@ show_help() {
   
 示例:
 
-  ./scripts/kb.sh today
-  ./scripts/kb.sh sync             # 推荐工作流！
-  ./scripts/kb.sh done notes/cuda/Bank冲突.md
+  ./scripts/kb.sh today            # 推荐工作流！每日开始：生成需要复习的知识点列表
+  ./scripts/kb.sh sync             # 推荐工作流！同步复习清单中已勾选的笔记，标记为已经复习
+  ./scripts/kb.sh done notes/cuda/Bank冲突.md   # 标记知识点文档为该次为已经复习
   ./scripts/kb.sh fix              # 检查并修复元数据
   ./scripts/kb.sh fix --auto       # 自动修复所有不一致
   ./scripts/kb.sh fix --dry-run    # 仅检查不修复
-  ./scripts/kb.sh new notes/新主题/新笔记.md
+  ./scripts/kb.sh new notes/新主题/新笔记.md # 根据模板创建知识点文档
   ./scripts/kb.sh update-all
 
 💡 推荐工作流:
