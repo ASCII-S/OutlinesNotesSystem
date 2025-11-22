@@ -117,7 +117,6 @@ info "3️⃣ 创建目录结构..."
 
 mkdir -p notes/outline_template
 mkdir -p outlines
-mkdir -p docs
 mkdir -p reviewsArchived
 mkdir -p config
 
