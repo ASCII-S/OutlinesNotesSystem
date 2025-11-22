@@ -119,7 +119,8 @@ system/
 
 ## 📚 延伸阅读
 
-- `system/docs/INSTALLATION.md` — 系统要求、依赖与初始化细节
+- `system/docs/QUICKSTART.md` — 5 分钟快速上手
+- `system/docs/CLAUDE_CODE_GUIDE.md` — 使用 Claude Code 自动生成面试大纲和知识点文档
 - `system/docs/USER_GUIDE.md` — 大纲与笔记协同、脚本命令、每日节奏
 - `system/docs/CUSTOMIZATION.md` — 配置项说明、脚本参数与高级玩法
 - `system/docs/DEVELOPMENT.md` — 希望二次开发或贡献代码的必读说明
