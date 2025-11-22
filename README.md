@@ -48,6 +48,16 @@ system/
 
 ---
 
+## 💻 系统要求
+
+**本项目需要在 WSL/Linux 环境中运行**
+
+- 支持的环境：WSL (Windows Subsystem for Linux)、Linux 发行版
+- 不支持：Windows 原生环境、macOS（未测试）
+- 依赖工具：Bash、Python 3.x、Git
+
+---
+
 ## ⚡ 五步完成首次配置
 
 1. **创建知识库目录**
