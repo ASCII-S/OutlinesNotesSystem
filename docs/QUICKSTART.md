@@ -13,15 +13,6 @@ cd my-kb
 
 ---
 
-## 2. （可选）启用虚拟环境
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate   # Windows PowerShell: .venv\Scripts\Activate.ps1
-```
-
----
-
 ## 3. 运行初始化脚本
 
 ```bash
@@ -31,7 +22,7 @@ source .venv/bin/activate   # Windows PowerShell: .venv\Scripts\Activate.ps1
 完成以下事项：
 
 - 检查 Python / Git
-- 安装依赖
+- 创建虚拟环境 `venv`并安装依赖
 - 创建 `notes/`、`outlines/`、`reviewsArchived/`
 - 生成用户配置 `config/kb_config.yaml`
 
@@ -40,8 +31,8 @@ source .venv/bin/activate   # Windows PowerShell: .venv\Scripts\Activate.ps1
 ## 4. 创建你的第一个主题
 
 ```bash
-mkdir -p outlines notes/我的第一个主题
-cp system/templates/note_template.md notes/我的第一个主题/示例知识点.md
+touch outlines/我的第一个主题.md 
+touch notes/我的第一个主题/示例知识点.md
 ```
 
 编辑 `outlines/我的第一个主题.md`，写下知识点清单，并链接到对应的笔记：
@@ -63,14 +54,3 @@ cp system/templates/note_template.md notes/我的第一个主题/示例知识点
 ```bash
 ./system/end.sh
 ```
-
----
-
-## 下一步
-
-- `system/docs/INSTALLATION.md`：了解更多环境细节
-- `system/docs/USER_GUIDE.md`：掌握大纲驱动的日常工作流
-- `system/docs/CUSTOMIZATION.md`：根据需求调整配置
-
-祝你学习顺利、持续进步！***
-
