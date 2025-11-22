@@ -46,8 +46,7 @@ show_help() {
   done <file>              标记单个笔记为已复习
   fix [--auto] [--dry-run] 检查并修复元数据不一致
   stats                    查看统计信息
-  
-  graph                    生成知识图谱（所有格式）
+
   index                    生成跨主题索引
   report                   生成统计报表
   
@@ -130,19 +129,11 @@ case "${1:-}" in
             esac
             shift
         done
-        
+
         info "检查元数据不一致..."
         python scripts/review_manager.py fix $args
         ;;
-    
-    graph)
-        info "生成知识图谱..."
-        python scripts/knowledge_graph.py --all
-        success "知识图谱已生成"
-        info "  - HTML: docs/knowledge_graph.html"
-        info "  - Markdown: outlines/_知识图谱.md"
-        ;;
-    
+
     index)
         info "生成跨主题索引..."
         python scripts/auto_link.py index
@@ -243,36 +234,29 @@ case "${1:-}" in
     update-all)
         info "开始全面更新..."
         echo
-        
-        info "[1/4] 生成复习清单..."
+
+        info "[1/3] 生成复习清单..."
         python scripts/review_manager.py today
         success "完成"
         echo
-        
-        info "[2/4] 生成知识图谱..."
-        python scripts/knowledge_graph.py --all
-        success "完成"
-        echo
-        
-        info "[3/4] 生成跨主题索引..."
+
+        info "[2/3] 生成跨主题索引..."
         python scripts/auto_link.py index
         success "完成"
         echo
-        
-        info "[4/4] 生成统计报表..."
+
+        info "[3/3] 生成统计报表..."
         python scripts/stats_generator.py
         success "完成"
         echo
-        
+
         success "全部更新完成！"
         info "生成的文件:"
         info "  - reviewsToday.md"
-        info "  - outlines/_知识图谱.md"
         info "  - outlines/_知识点索引.md"
         info "  - outlines/_统计报表.md"
-        info "  - docs/knowledge_graph.html"
         ;;
-    
+
     help|--help|-h)
         show_help
         ;;
