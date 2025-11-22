@@ -152,12 +152,29 @@ git_config_env=$(load_git_config)
 eval "$git_config_env"
 
 if [ "${git_push_enabled:-0}" -eq 1 ]; then
-    info "🚀 推送到远程仓库..."
-    git push || {
-        error "Git push失败"
-        exit 1
-    }
-    success "✅ Git 提交并推送成功！"
+    # 检查是否配置了远程仓库
+    if ! git remote get-url origin &>/dev/null; then
+        warning "未配置远程仓库，跳过推送"
+        info "💾 仅本地提交"
+        success "✅ Git 提交成功！"
+    else
+        info "🔄 同步远程仓库..."
+        # 先拉取远程更改并rebase到本地提交之上
+        git pull --rebase origin $(git symbolic-ref --short HEAD) || {
+            error "Git pull --rebase 失败，可能存在冲突"
+            error "请手动解决冲突后执行："
+            error "  git rebase --continue"
+            error "  git push"
+            exit 1
+        }
+
+        info "🚀 推送到远程仓库..."
+        git push || {
+            error "Git push失败"
+            exit 1
+        }
+        success "✅ Git 提交并推送成功！"
+    fi
 else
     info "💾 仅本地提交（push已禁用，如需推送请配置 config/git_config.yaml 中的 push.enabled: true）"
     success "✅ Git 提交成功！"
