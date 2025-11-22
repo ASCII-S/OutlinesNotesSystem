@@ -365,7 +365,7 @@ def generate_review_markdown(review_list: Dict[str, List[Dict]], config: Dict) -
             review_count = note.get('review_count', 0)
             difficulty = note.get('difficulty', 'medium')
             
-            md += f"**{i}.** "
+            # md += f"**{i}.** "
             md += f"- [ ] [{note['title']}]({note['relative_path']}) - {next_review}\n"
             md += f"  - 已复习: {review_count}次 | 难度: {difficulty}\n"
         md += "\n"
