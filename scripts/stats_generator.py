@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入配置加载工具
 from config_loader import load_config
+from path_filter import create_path_filter
 
 # 项目根目录
 ROOT_DIR = Path(__file__).parent.parent.parent  # 脚本在 system/scripts/ 中
@@ -42,12 +43,22 @@ def parse_frontmatter(content: str) -> Dict:
     return {}
 
 
-def scan_all_notes(notes_dir: Path) -> List[Dict]:
+def scan_all_notes(notes_dir: Path, config: Dict = None) -> List[Dict]:
     """扫描所有笔记"""
     notes = []
-    
+
+    # 创建路径过滤器
+    path_filter = None
+    if config:
+        path_filter = create_path_filter(config, notes_dir)
+
     for md_file in notes_dir.rglob("*.md"):
-        if md_file.name.startswith('.'):
+        # 使用统一的过滤逻辑
+        if path_filter and path_filter.should_ignore(md_file):
+            continue
+
+        # 向后兼容：如果没有path_filter，使用旧逻辑
+        if not path_filter and md_file.name.startswith('.'):
             continue
         
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -359,7 +370,7 @@ def main():
     config = load_config()
     
     print("🔍 扫描笔记文件...")
-    notes = scan_all_notes(NOTES_DIR)
+    notes = scan_all_notes(NOTES_DIR, config)
     print(f"📚 找到 {len(notes)} 篇笔记")
     
     print("📊 生成统计报表...")

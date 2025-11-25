@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入配置加载工具
 from config_loader import load_config
+from path_filter import create_path_filter
 
 # 项目根目录
 ROOT_DIR = Path(__file__).parent.parent.parent  # 脚本在 system/scripts/ 中
@@ -170,13 +171,24 @@ def update_related_notes_section(filepath: Path, related_notes: List[Tuple[Dict,
         f.write(new_content)
 
 
-def scan_all_notes(notes_dir: Path) -> List[Dict]:
+def scan_all_notes(notes_dir: Path, config: Dict = None) -> List[Dict]:
     """扫描所有笔记，提取元数据和关键词"""
     notes = []
-    
+
     print("🔍 扫描笔记文件...")
+
+    # 创建路径过滤器
+    path_filter = None
+    if config:
+        path_filter = create_path_filter(config, notes_dir)
+
     for md_file in notes_dir.rglob("*.md"):
-        if md_file.name.startswith('.'):
+        # 使用统一的过滤逻辑
+        if path_filter and path_filter.should_ignore(md_file):
+            continue
+
+        # 向后兼容：如果没有path_filter，使用旧逻辑
+        if not path_filter and md_file.name.startswith('.'):
             continue
         
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -278,7 +290,7 @@ def main():
             return
         
         print(f"📄 处理文件: {filepath.name}")
-        all_notes = scan_all_notes(NOTES_DIR)
+        all_notes = scan_all_notes(NOTES_DIR, config)
         
         print("🔗 查找相关笔记...")
         related_notes = find_related_notes(filepath, all_notes, config)
@@ -295,7 +307,7 @@ def main():
         print("✅ 完成")
     
     elif args.command == 'update-all':
-        all_notes = scan_all_notes(NOTES_DIR)
+        all_notes = scan_all_notes(NOTES_DIR, config)
         
         print(f"🔄 开始更新所有文档...")
         for i, note in enumerate(all_notes, 1):
@@ -306,7 +318,7 @@ def main():
         print("✅ 全部完成")
     
     elif args.command == 'index':
-        all_notes = scan_all_notes(NOTES_DIR)
+        all_notes = scan_all_notes(NOTES_DIR, config)
         
         print("📊 生成跨主题索引...")
         index_content = generate_cross_topic_index(all_notes, config)

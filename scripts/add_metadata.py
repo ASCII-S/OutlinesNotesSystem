@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入配置加载工具
 from config_loader import load_config
+from path_filter import create_path_filter
 
 # 项目根目录
 ROOT_DIR = Path(__file__).parent.parent.parent  # 脚本在 system/scripts/ 中
@@ -99,13 +100,17 @@ def scan_and_add_metadata(notes_dir: Path, config: Dict, dry_run: bool = False) 
         'added': 0,
         'files': []
     }
-    
+
     print("🔍 扫描笔记文件...")
-    
+
+    # 创建路径过滤器
+    path_filter = create_path_filter(config, notes_dir)
+
     for md_file in notes_dir.rglob("*.md"):
-        if md_file.name.startswith('.'):
+        # 使用统一的过滤逻辑
+        if path_filter.should_ignore(md_file):
             continue
-        
+
         stats['total'] += 1
         
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -151,11 +156,15 @@ def scan_and_add_metadata(notes_dir: Path, config: Dict, dry_run: bool = False) 
 def update_existing_metadata(notes_dir: Path, config: Dict, field: str, value: any) -> int:
     """更新现有笔记的某个元数据字段"""
     updated = 0
-    
+
     print(f"🔍 扫描并更新字段: {field} = {value}")
-    
+
+    # 创建路径过滤器
+    path_filter = create_path_filter(config, notes_dir)
+
     for md_file in notes_dir.rglob("*.md"):
-        if md_file.name.startswith('.'):
+        # 使用统一的过滤逻辑
+        if path_filter.should_ignore(md_file):
             continue
         
         with open(md_file, 'r', encoding='utf-8') as f:
@@ -238,7 +247,7 @@ def main():
     
     elif args.command == 'fix':
         print("🔧 修复不完整的元数据...")
-        
+
         required_fields = {
             'created': datetime.now().strftime('%Y-%m-%d'),
             'last_reviewed': datetime.now().strftime('%Y-%m-%d'),
@@ -249,10 +258,14 @@ def main():
             'tags': [],
             'related_outlines': []
         }
-        
+
+        # 创建路径过滤器
+        path_filter = create_path_filter(config, NOTES_DIR)
+
         fixed = 0
         for md_file in NOTES_DIR.rglob("*.md"):
-            if md_file.name.startswith('.'):
+            # 使用统一的过滤逻辑
+            if path_filter.should_ignore(md_file):
                 continue
             
             with open(md_file, 'r', encoding='utf-8') as f:

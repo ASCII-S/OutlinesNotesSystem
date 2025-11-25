@@ -39,7 +39,7 @@ default_difficulty: "medium"
 # 每日复习数量限制
 daily_review:
   # 每个分类的最大显示数量（0表示不限制）
-  max_overdue: 10       # 已过期最多显示10个
+  max_overdue: 30       # 已过期最多显示10个
   max_today: 20         # reviewsToday最多显示20个
   max_this_week: 30     # 本周计划最多显示30个
   
@@ -126,4 +126,37 @@ gamification:
   streak:
     enable: true
     show_icon: true
+
+# 扫描忽略配置
+scan_ignore:
+  # 启用忽略功能
+  enabled: true
+
+  # 忽略模式（支持多种匹配方式）
+  patterns:
+    # 精确路径匹配（相对于notes目录）
+    exact_paths:
+      # - "精通vllm源码/vllm"           # git子模块示例（已由auto_detect_submodules自动处理）
+
+    # 通配符模式（glob pattern）
+    globs:
+      # - "**/vllm/**"                   # 任何vllm子目录
+      # - "**/_archived/**"              # 任何_archived目录
+
+    # 正则表达式模式（高级用法）
+    regex:
+      # - "^精通.*源码/.*/\\..*"          # 源码目录下的隐藏文件夹
+
+  # 按文件名/目录名忽略
+  ignore_names:
+    - ".git"
+    - "node_modules"
+    - "__pycache__"
+
+  # 按前缀忽略（目录或文件名）
+  ignore_prefixes:
+    - "."          # 隐藏文件/目录（如 .hidden/）
+
+  # Git子模块自动检测（推荐开启）
+  auto_detect_submodules: true
 

@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入配置加载工具
 from config_loader import load_config
+from path_filter import create_path_filter
 
 # 项目根目录（脚本在 system/scripts/ 中）
 ROOT_DIR = Path(__file__).parent.parent.parent
@@ -127,19 +128,29 @@ def calculate_mastery_level(review_count: int, days_since_created: int, difficul
     return round(mastery, 2)
 
 
-def scan_notes(notes_dir: Path) -> List[Dict]:
+def scan_notes(notes_dir: Path, config: Dict = None) -> List[Dict]:
     """扫描所有笔记文件"""
     notes = []
-    
+
+    # 创建路径过滤器
+    path_filter = None
+    if config:
+        path_filter = create_path_filter(config, notes_dir)
+
     for md_file in notes_dir.rglob("*.md"):
-        if md_file.name.startswith('.'):
+        # 使用统一的过滤逻辑
+        if path_filter and path_filter.should_ignore(md_file):
             continue
-            
+
+        # 向后兼容：如果没有path_filter，使用旧逻辑
+        if not path_filter and md_file.name.startswith('.'):
+            continue
+
         with open(md_file, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         frontmatter, _ = parse_frontmatter(content)
-        
+
         if frontmatter:
             note_info = {
                 'filepath': md_file,
@@ -148,7 +159,7 @@ def scan_notes(notes_dir: Path) -> List[Dict]:
                 **frontmatter
             }
             notes.append(note_info)
-    
+
     return notes
 
 
@@ -653,7 +664,7 @@ def scan_and_fix_metadata(config: Dict, auto_fix: bool = False, dry_run: bool = 
         dry_run: 是否仅模拟（不实际修改）
     """
     print("🔍 扫描笔记文件...")
-    notes = scan_notes(NOTES_DIR)
+    notes = scan_notes(NOTES_DIR, config)
     print(f"📚 找到 {len(notes)} 篇笔记\n")
     
     inconsistent_notes = []
@@ -733,7 +744,8 @@ def sync_from_review_list(config: Dict) -> None:
         content = f.read()
     
     # 匹配已勾选的笔记：- [x] [标题](路径)
-    pattern = r'- \[x\] \[([^\]]+)\]\(([^\)]+)\)'
+    # 使用非贪婪匹配到.md结尾，兼容文件名中包含括号的情况
+    pattern = r'- \[x\] \[([^\]]+)\]\(([^\n]+?\.md)\)'
     matches = re.findall(pattern, content, re.IGNORECASE)
     
     if not matches:
@@ -780,13 +792,15 @@ def sync_from_review_list(config: Dict) -> None:
     if updated > 0:
         print()
         try:
-            response = input("是否清空已完成的checkbox？(y/N) ")
-            if response.lower() == 'y':
+            response = input("是否清空已完成的checkbox？(Y/n) ")
+            if response.lower() != 'n':
                 # 将 [x] 替换为 [✓]（已完成标记）
                 new_content = re.sub(r'- \[x\] ', '- [✓] ', content, flags=re.IGNORECASE)
                 with open(review_file, 'w', encoding='utf-8') as f:
                     f.write(new_content)
                 print("✅ 已更新复习清单")
+            else:
+                print("ℹ️  保留已完成的checkbox")
         except (EOFError, KeyboardInterrupt):
             print("\nℹ️  已跳过清空checkbox")
 
@@ -846,7 +860,7 @@ def main():
                 print(f"📦 已归档旧复习清单: reviewsArchived/{year}/{month}/{old_date}.md")
         
         print("🔍 扫描笔记文件...")
-        notes = scan_notes(NOTES_DIR)
+        notes = scan_notes(NOTES_DIR, config)
         print(f"📚 找到 {len(notes)} 篇笔记")
         
         print("📋 生成复习清单...")
@@ -884,7 +898,7 @@ def main():
     
     elif args.command == 'stats':
         print("🔍 扫描笔记文件...")
-        notes = scan_notes(NOTES_DIR)
+        notes = scan_notes(NOTES_DIR, config)
         
         total = len(notes)
         with_metadata = sum(1 for n in notes if n.get('review_count') is not None)

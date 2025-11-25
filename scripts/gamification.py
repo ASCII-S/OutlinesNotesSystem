@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入配置加载工具
 from config_loader import load_config
+from path_filter import create_path_filter
 
 # 项目根目录（脚本在 system/scripts/ 中）
 ROOT_DIR = Path(__file__).parent.parent.parent
@@ -102,13 +103,17 @@ def scan_topic_notes(topic: str, notes_dir: Path, config: Dict) -> Tuple[int, in
     topic_dir = notes_dir / topic
     if not topic_dir.exists():
         return 0, 0
-    
+
     total = 0
     mastered = 0
     threshold = config['gamification']['mastery_threshold']
-    
+
+    # 创建路径过滤器
+    path_filter = create_path_filter(config, notes_dir)
+
     for md_file in topic_dir.rglob("*.md"):
-        if md_file.name.startswith('.') or md_file.name.startswith('_'):
+        # 使用统一的过滤逻辑
+        if path_filter.should_ignore(md_file):
             continue
         
         total += 1
